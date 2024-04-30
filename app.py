@@ -7,7 +7,7 @@ st.write("""
 [Workout Wednesday (WOW)](https://workout-wednesday.com/) is an excellent challenge 
 to familiarize myself with the plotting library such as plotly, bokeh, matplotlib, etc. 
 
-This webapp is a collection of my implementation of WOW challenge with python. 
+This webapp is a collection of my practice of WOW challenge with python. 
 For the first version, I mainly re-create the WOW challenge by plotly, which is
 flexible enough to customize the drawing according to the WOW challenge, creating
 a chart as similar as possible to that in the WOW challenge.
