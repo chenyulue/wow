@@ -51,3 +51,7 @@ with st.expander("See the complete plotting code"):
         with open("./pages/wow_18/wk01.py", "r", encoding="utf-8") as f:
             code = f.read()
         st.code(code, line_numbers=True)
+    elif challenge == "wow18wk02":
+        with open("./pages/wow_18/wk02.py", "r", encoding="utf-8") as f:
+            code = f.read()
+        st.code(code, line_numbers=True)
