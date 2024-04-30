@@ -29,6 +29,7 @@ with plotly:
         st.plotly_chart(wk01.fig)
     elif challenge == "wow18wk02":
         from pages.wow_18 import wk02
+        st.markdown("# Fiscal Date Running Sum")
         start_month = st.selectbox(
             label="Fiscal Month Start",
             options=range(1, 13),
