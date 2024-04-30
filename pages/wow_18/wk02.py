@@ -59,6 +59,7 @@ def plot_fiscal_data(start_month: int):
                         "Running Sum of Sales: %{customdata[4]:$,.0f}<extra></extra>"
             ),
             showlegend=False,
+            line_width=3,
         ))
         xrange.append(data18w02_year["x_datetime"])
 
@@ -70,6 +71,7 @@ def plot_fiscal_data(start_month: int):
             x=trace["x"][-1], y=trace["y"][-1],
             xanchor="left", yanchor="middle",
             showarrow=False,
+            font=dict(size=16, color="black"),
         )
 
     # Make the xaxis range a little wider than the default
@@ -83,16 +85,16 @@ def plot_fiscal_data(start_month: int):
             nticks=16,
             tickmode="auto",
             range=[x0, x1],
+            tickfont_size=16,
+            linecolor="gray",
         ),
         yaxis=dict(
-            tickformat="$,.0f"
+            tickformat="$,.0f",
+            tickfont_size=16,
+            linecolor="gray",
         ),
         width=800, height=600,
         template="simple_white",
-        hoverlabel=dict(
-            bgcolor="white",
-            bordercolor="gray",
-            font_color="black",
-        )
+        margin=dict(t=30, b=20, r=30),
     )
     return fig

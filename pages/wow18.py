@@ -6,7 +6,7 @@ menu.side_navigation()
 
 options = {
     "wow18wk01": "Week 01: Looks vs. Personality",
-    "wow18wk02": "Year to Fiscal Date Running Totals",
+    "wow18wk02": "Week 02: Year to Fiscal Date Running Totals",
 }
 
 challenge = st.selectbox(
