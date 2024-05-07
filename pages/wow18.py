@@ -1,4 +1,5 @@
 import streamlit as st
+from datetime import datetime, timedelta
 import menu
 import assets
 
@@ -7,6 +8,7 @@ menu.side_navigation()
 options = {
     "wow18wk01": "Week 01: Looks vs. Personality",
     "wow18wk02": "Week 02: Year to Fiscal Date Running Totals",
+    "wow18wk03": "Week 03: Rolling three month sales"
 }
 
 challenge = st.selectbox(
@@ -20,13 +22,16 @@ if challenge == "wow18wk01":
     st.markdown("[Challenge source](https://www.vizwiz.com/2018/01/ww-looks-vs-personality.html): Workout Wednesday: Looks vs. Personality")
 elif challenge == "wow18wk02":
     st.markdown("[Challenge source](https://workout-wednesday.com/workout-wednesday-2018-week-2-year-to-fiscal-date-running-totals/): Workout Wednesday: Year to Fiscal Date Running Totals")
+elif challenge == "wow18wk03":
+    st.markdown("[Challenge source](https://workout-wednesday.com/week3/): Workout Wednesday: Rolling three month sales")
 
-plotly, data = st.tabs(["Chart by Plotly", "Data"])
+
+plotly, data = st.tabs(["Chart", "Data"])
 
 with plotly:
     if challenge == "wow18wk01":
         from pages.wow_18 import wk01
-        st.plotly_chart(wk01.fig)
+        st.plotly_chart(wk01.fig,)
     elif challenge == "wow18wk02":
         from pages.wow_18 import wk02
         st.markdown("# Fiscal Date Running Sum")
@@ -35,8 +40,22 @@ with plotly:
             options=range(1, 13),
             key="start_month",
         )
-        fig = wk02.plot_fiscal_data(int(start_month))
+        fig = wk02.plot_fiscal_data(int(start_month)) # type: ignore
         st.plotly_chart(fig,)
+    elif challenge == "wow18wk03":
+        from pages.wow_18 import wk03
+        plot_region = st.empty()
+        param_date = st.slider(
+            label="parametric date",
+            min_value=datetime(2014, 1, 1),
+            max_value=datetime(2017, 12, 1),
+            value=datetime(2016, 6, 1),
+            step=timedelta(days=30),
+            format="MMM-YY",
+            label_visibility="collapsed"
+        )
+        fig = wk03.get_figure(param_date.replace(day=1))
+        plot_region.plotly_chart(fig, use_container_width=True)
 
 with data:
     if challenge == "wow18wk01":
