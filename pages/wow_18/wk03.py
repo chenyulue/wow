@@ -54,6 +54,11 @@ def get_figure(param_date):
                 line=dict(
                     color=colors[cat],
                 ),
+                hovertemplate=(f"Category: {cat}<br>"
+                               "Order Month: %{x}<br>"
+                               "Rolling 3 month sales: $%{y:,.0f}"
+                               "<extra></extra>"
+                ),
             )
         )
         data_left.sort(key=lambda f: f.y[-1])
@@ -70,6 +75,11 @@ def get_figure(param_date):
                     width=1,
                 ),
                 showlegend=False,
+                hovertemplate=(f"Category: {cat}<br>"
+                               "Order Month: %{x}<br>"
+                               "Rolling 3 month sales: $%{y:,.0f}"
+                               "<extra></extra>"
+                ),
             )
         )
         data_right.sort(key=lambda f: f.y[0])
@@ -82,8 +92,12 @@ def get_figure(param_date):
                 text=[f" <b>{cat}</b><br> ${cat_data[param_date]/1000:.1f}K"],
                 stackgroup="text",
                 textposition="middle right",
-                # textfont_weight="bold",
                 showlegend=False,
+                hovertemplate=(f"Category: {cat}<br>"
+                               "Order Month: %{x}<br>"
+                               "Rolling 3 month sales: $%{y:,.0f}"
+                               "<extra></extra>"
+                ),
             )
         )
         data_text.sort(key=lambda f: f.y[0])

@@ -1,7 +1,6 @@
 import streamlit as st
 from datetime import datetime, timedelta
 import menu
-import assets
 
 menu.side_navigation()
 
@@ -48,9 +47,9 @@ with plotly:
         param_date = st.slider(
             label="parametric date",
             min_value=datetime(2014, 1, 1),
-            max_value=datetime(2017, 12, 1),
+            max_value=datetime(2017, 12, 31),
             value=datetime(2016, 6, 1),
-            step=timedelta(days=30),
+            step=timedelta(days=31),
             format="MMM-YY",
             label_visibility="collapsed"
         )
@@ -65,13 +64,25 @@ with data:
         from pages.wow_18 import wk02
         data = wk02.get_fiscal_data(int(st.session_state["start_month"]))
         st.dataframe(data, use_container_width=True)
+    elif challenge == "wow18wk03":
+        from pages.wow_18 import wk03
+        data = wk03.data18w03_grouped.reset_index().iloc[:, [0, 1, 3]]
+        st.dataframe(data, use_container_width=True)
 
 with st.expander("See the complete plotting code"):
-    if challenge == "wow18wk01":
-        with open("./pages/wow_18/wk01.py", "r", encoding="utf-8") as f:
-            code = f.read()
-        st.code(code, line_numbers=True)
-    elif challenge == "wow18wk02":
-        with open("./pages/wow_18/wk02.py", "r", encoding="utf-8") as f:
-            code = f.read()
-        st.code(code, line_numbers=True)
+    file = f"./pages/wow_18/{challenge[5:]}.py" # type: ignore
+    with open(file, "r", encoding="utf-8") as f:
+        code = f.read()
+    st.code(code, line_numbers=True)
+    # if challenge == "wow18wk01":
+    #     with open("./pages/wow_18/wk01.py", "r", encoding="utf-8") as f:
+    #         code = f.read()
+    #     st.code(code, line_numbers=True)
+    # elif challenge == "wow18wk02":
+    #     with open("./pages/wow_18/wk02.py", "r", encoding="utf-8") as f:
+    #         code = f.read()
+    #     st.code(code, line_numbers=True)
+    # elif challenge == "wow18wk03":
+    #     with open("./pages/wow_18/wk03.py", "r", encoding="utf-8") as f:
+    #         code = f.read()
+    #     st.code(code, line_numbers=True)
