@@ -7,7 +7,8 @@ menu.side_navigation()
 options = {
     "wow18wk01": "Week 01: Looks vs. Personality",
     "wow18wk02": "Week 02: Year to Fiscal Date Running Totals",
-    "wow18wk03": "Week 03: Rolling three month sales"
+    "wow18wk03": "Week 03: Rolling three month sales",
+    "wow18wk04": "Week 04: Tables"
 }
 
 challenge = st.selectbox(
@@ -23,6 +24,8 @@ elif challenge == "wow18wk02":
     st.markdown("[Challenge source](https://workout-wednesday.com/workout-wednesday-2018-week-2-year-to-fiscal-date-running-totals/): Workout Wednesday: Year to Fiscal Date Running Totals")
 elif challenge == "wow18wk03":
     st.markdown("[Challenge source](https://workout-wednesday.com/week3/): Workout Wednesday: Rolling three month sales")
+elif challenge == "wow18wk04":
+    st.markdown("[Challenge source](https://workout-wednesday.com/workoutwednesday-week4/): Workout Wednesday: Tables")
 
 
 plotly, data = st.tabs(["Chart", "Data"])
@@ -55,6 +58,9 @@ with plotly:
         )
         fig = wk03.get_figure(param_date.replace(day=1))
         plot_region.plotly_chart(fig, use_container_width=True)
+    elif challenge == "wow18wk04":
+        from pages.wow_18 import wk04
+        st.plotly_chart(wk04.fig, use_container_width=True, theme=None,)
 
 with data:
     if challenge == "wow18wk01":
@@ -68,6 +74,9 @@ with data:
         from pages.wow_18 import wk03
         data = wk03.data18w03_grouped.reset_index().iloc[:, [0, 1, 3]]
         st.dataframe(data, use_container_width=True)
+    elif challenge == "wow18wk04":
+        from pages.wow_18 import wk04
+        st.dataframe(wk04.data18w04_filtered, use_container_width=True)
 
 with st.expander("See the complete plotting code"):
     file = f"./pages/wow_18/{challenge[5:]}.py" # type: ignore
