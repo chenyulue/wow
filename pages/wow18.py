@@ -8,7 +8,8 @@ options = {
     "wow18wk01": "Week 01: Looks vs. Personality",
     "wow18wk02": "Week 02: Year to Fiscal Date Running Totals",
     "wow18wk03": "Week 03: Rolling three month sales",
-    "wow18wk04": "Week 04: Tables"
+    "wow18wk04": "Week 04: Tables",
+    "wow18wk05": "Week 05: Q1 and Q2 compared to other months",
 }
 
 challenge = st.selectbox(
@@ -26,6 +27,8 @@ elif challenge == "wow18wk03":
     st.markdown("[Challenge source](https://workout-wednesday.com/week3/): Workout Wednesday: Rolling three month sales")
 elif challenge == "wow18wk04":
     st.markdown("[Challenge source](https://workout-wednesday.com/workoutwednesday-week4/): Workout Wednesday: Tables")
+elif challenge == "wow18wk05":
+    st.markdown("[Challenge source](https://workout-wednesday.com/workoutwednesday-2018-week-5/): Q1 and Q2 compared to other months")
 
 
 plotly, data = st.tabs(["Chart", "Data"])
@@ -61,7 +64,29 @@ with plotly:
     elif challenge == "wow18wk04":
         from pages.wow_18 import wk04
         st.plotly_chart(wk04.fig, use_container_width=True, theme=None,)
-
+    elif challenge == "wow18wk05":
+        from pages.wow_18 import wk05
+        draw, widgets = st.columns([8, 2])
+        with widgets:
+            years = st.multiselect(
+                label="Year",
+                options=[2014, 2015, 2016, 2017],
+                default=[2014, 2015, 2016, 2017],
+                placeholder="Choose years",
+                key="years",
+            )
+            start_month = st.slider(
+                label="Starting Month",
+                min_value=1,
+                max_value=12,
+                value=6,
+                step=1,
+                key="start_month",
+            )
+        with draw:
+            fig = wk05.get_figure(years, start_month)
+            st.plotly_chart(fig, use_container_width=True)
+        
 with data:
     if challenge == "wow18wk01":
         from pages.wow_18 import wk01
@@ -77,6 +102,10 @@ with data:
     elif challenge == "wow18wk04":
         from pages.wow_18 import wk04
         st.dataframe(wk04.data18w04_filtered, use_container_width=True)
+    elif challenge == "wow18wk05":
+        from pages.wow_18 import wk05
+        data = wk05.trans_data(st.session_state["years"], st.session_state["start_month"])
+        st.dataframe(data, use_container_width=True)
 
 with st.expander("See the complete plotting code"):
     file = f"./pages/wow_18/{challenge[5:]}.py" # type: ignore
