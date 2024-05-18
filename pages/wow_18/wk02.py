@@ -82,7 +82,7 @@ def plot_fiscal_data(start_month: int):
     fig.update_layout(
         xaxis=dict(
             tickformat="%b %d",
-            nticks=16,
+            nticks=12,
             tickmode="auto",
             range=[x0, x1],
             tickfont_size=16,

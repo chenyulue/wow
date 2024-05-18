@@ -10,6 +10,7 @@ options = {
     "wow18wk03": "Week 03: Rolling three month sales",
     "wow18wk04": "Week 04: Tables",
     "wow18wk05": "Week 05: Q1 and Q2 compared to other months",
+    "wow18wk06": "Week 06: Regional Sales Across the Product Hierarchy",
 }
 
 challenge = st.selectbox(
@@ -29,6 +30,8 @@ elif challenge == "wow18wk04":
     st.markdown("[Challenge source](https://workout-wednesday.com/workoutwednesday-week4/): Workout Wednesday: Tables")
 elif challenge == "wow18wk05":
     st.markdown("[Challenge source](https://workout-wednesday.com/workoutwednesday-2018-week-5/): Q1 and Q2 compared to other months")
+elif challenge == "wow18wk06":
+    st.markdown("[Challenge source](https://workout-wednesday.com/workoutwednesday-week-6-regional-sales-across-the-product-hierarchy/): Regional Sales Across the Product Hierarchy")
 
 
 plotly, data = st.tabs(["Chart", "Data"])
@@ -36,7 +39,7 @@ plotly, data = st.tabs(["Chart", "Data"])
 with plotly:
     if challenge == "wow18wk01":
         from pages.wow_18 import wk01
-        st.plotly_chart(wk01.fig,)
+        st.plotly_chart(wk01.fig, use_container_width=True)
     elif challenge == "wow18wk02":
         from pages.wow_18 import wk02
         st.markdown("# Fiscal Date Running Sum")
@@ -46,7 +49,7 @@ with plotly:
             key="start_month",
         )
         fig = wk02.plot_fiscal_data(int(start_month)) # type: ignore
-        st.plotly_chart(fig,)
+        st.plotly_chart(fig, use_container_width=True)
     elif challenge == "wow18wk03":
         from pages.wow_18 import wk03
         plot_region = st.empty()
@@ -86,6 +89,19 @@ with plotly:
         with draw:
             fig = wk05.get_figure(years, start_month)
             st.plotly_chart(fig, use_container_width=True)
+    elif challenge == "wow18wk06":
+        from pages.wow_18 import wk06
+        options = ["Consumer", "Corporate", "Home Office"]
+        st.header("Regional Sales Product Hierarchy")
+        segment = st.multiselect(
+            label="Segment",
+            options=options,
+            default=options,
+            placeholder="Choose a segment",
+            key="segment",
+        )
+        fig = wk06.plot_figure(*segment)
+        st.plotly_chart(fig, use_container_width=True)
         
 with data:
     if challenge == "wow18wk01":
@@ -105,6 +121,12 @@ with data:
     elif challenge == "wow18wk05":
         from pages.wow_18 import wk05
         data = wk05.trans_data(st.session_state["years"], st.session_state["start_month"])
+        st.dataframe(data, use_container_width=True)
+    elif challenge == "wow18wk06":
+        from pages.wow_18 import wk06
+        data = wk06.transform_data(*st.session_state["segment"])
+        if len(data):
+            data = data.iloc[:, [0,1,2,3]]
         st.dataframe(data, use_container_width=True)
 
 with st.expander("See the complete plotting code"):
