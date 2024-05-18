@@ -11,6 +11,7 @@ options = {
     "wow18wk04": "Week 04: Tables",
     "wow18wk05": "Week 05: Q1 and Q2 compared to other months",
     "wow18wk06": "Week 06: Regional Sales Across the Product Hierarchy",
+    "wow18wk07": "Week 07: Min and Max Sales by Month"
 }
 
 challenge = st.selectbox(
@@ -32,6 +33,8 @@ elif challenge == "wow18wk05":
     st.markdown("[Challenge source](https://workout-wednesday.com/workoutwednesday-2018-week-5/): Q1 and Q2 compared to other months")
 elif challenge == "wow18wk06":
     st.markdown("[Challenge source](https://workout-wednesday.com/workoutwednesday-week-6-regional-sales-across-the-product-hierarchy/): Regional Sales Across the Product Hierarchy")
+elif challenge == "wow18wk07":
+    st.markdown("[Challenge source](https://workout-wednesday.com/min-and-max-sales-by-month/): Min and Max Sales by Month")
 
 
 plotly, data = st.tabs(["Chart", "Data"])
@@ -102,6 +105,25 @@ with plotly:
         )
         fig = wk06.plot_figure(*segment)
         st.plotly_chart(fig, use_container_width=True)
+    elif challenge == "wow18wk07":
+        from pages.wow_18 import wk07
+        col1, col2 = st.columns([1,1])
+        years = col1.multiselect(
+            label="Select Year",
+            options=[2014, 2015, 2016, 2017],
+            default=[2014, 2015, 2016, 2017],
+            placeholder="Choose a year",
+            key="years",
+        )
+        category = col2.multiselect(
+            label="Select Category",
+            options=["Furniture", "Office Supplies", "Technology"],
+            default=["Furniture", "Office Supplies", "Technology"],
+            placeholder="Choose a category",
+            key="category",
+        )
+        fig = wk07.get_figure(years, category)
+        st.plotly_chart(fig, use_container_width=True)
         
 with data:
     if challenge == "wow18wk01":
@@ -127,6 +149,11 @@ with data:
         data = wk06.transform_data(*st.session_state["segment"])
         if len(data):
             data = data.iloc[:, [0,1,2,3]]
+        st.dataframe(data, use_container_width=True)
+    elif challenge == "wow18wk07":
+        from pages.wow_18 import wk07
+        data = wk07.transform_data(st.session_state["years"], st.session_state["category"])
+        data.columns = [datetime(year=1900, month=m, day=1).strftime("%B") if isinstance(m, int) else m for m in data.columns]
         st.dataframe(data, use_container_width=True)
 
 with st.expander("See the complete plotting code"):
