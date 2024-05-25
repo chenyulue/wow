@@ -13,36 +13,28 @@ data18w01_filtered = (
     .sort_values(by=["Women", "Men"])
 )
 
-fig = px.scatter(
-    data18w01_filtered,
-    x=data18w01_filtered.columns,
-    y=data18w01_filtered.index,
-)
-marker_fg = "#449EA0"
-marker_size = 16
-fig.update_traces(
-    selector=dict(type="scatter", name="Men"),
-    marker=dict(
-        color=marker_fg,
-        size=marker_size,
-        line_width=3,
-        line_color=marker_fg,
-    ),
-    hovertemplate="<b>%{y}</b><br>Men: <b>%{x}%</b><extra></extra>",
-    zorder=1,
-)
-fig.update_traces(
-    selector=dict(type="scatter", name="Women"),
-    marker=dict(
-        color="white",
-        size=marker_size,
-        line_width=3,
-        line_color=marker_fg,
-    ),
-    hovertemplate="<b>%{y}</b><br>Women: <b>%{x}%</b><extra></extra>",
-    zorder=1,
-)
+fig = go.Figure()
 
+# Bar background
+bar_fg = "#D5D6D8"
+data = [
+    go.Bar(
+        x=[10] * len(data18w01_filtered),
+        y=data18w01_filtered.index,
+        orientation="h",
+        marker=dict(
+            color=bar_fg,
+            line_width=2,
+            line_color="white",
+        ),
+        showlegend=False,
+        hoverinfo="none",
+    )
+    for _ in range(10)
+]
+fig.add_traces(data)
+
+# Line trace
 fig.add_trace(
     go.Scatter(
         x=[55, 83, None, 52, 79, None, 46, 64],
@@ -65,24 +57,33 @@ fig.add_trace(
     )
 )
 
-bar_fg = "#D5D6D8"
-data = [
-    go.Bar(
-        x=[10] * len(data18w01_filtered),
-        y=data18w01_filtered.index,
-        orientation="h",
-        marker=dict(
-            color=bar_fg,
-            line_width=2,
-            line_color="white",
-        ),
-        showlegend=False,
-        hoverinfo="none",
+# Dot trace
+marker_fg = marker_fg = "#449EA0"
+marker_size = 16
+for sex in data18w01_filtered.columns:
+    fig.add_trace(
+        go.Scatter(
+            x=data18w01_filtered[sex],
+            y=data18w01_filtered.index,
+            mode="markers",
+            name=sex,
+            meta=[sex],
+            marker=dict(
+                color=marker_fg,
+                size=marker_size,
+                line_width=3,
+                line_color=marker_fg,
+            ),
+            hovertemplate="<b>%{y}</b><br>%{meta[0]}: <b>%{x}%</b><extra></extra>",
+        )
     )
-    for _ in range(10)
-]
-fig.add_traces(data)
 
+fig.update_traces(
+    selector=dict(type="scatter", name="Women"),
+    marker=dict(
+        color="white",
+    ),
+)
 
 fig.add_vline(
     x=0,
@@ -195,13 +196,20 @@ fig.add_annotation(
 )
 
 fig.add_annotation(
-    text=("% of people who ranked a romantic partner having a personality <br>"
-            "they liked as more important than them being good looking"),
-    x=-0.25, xref="paper", 
-    y=1.105, yref="paper", yanchor="bottom",
+    text=(
+        "% of people who ranked a romantic partner having a personality <br>"
+        "they liked as more important than them being good looking"
+    ),
+    x=0,
+    xref="paper",
+    y=1,
+    yref="paper",
+    yanchor="bottom",
     showarrow=False,
     font_size=16,
     align="left",
+    yshift=60,
+    xshift=-40,
 )
 
 fig.update_layout(
@@ -237,12 +245,14 @@ fig.update_layout(
     ),
     title=dict(
         text=(
-            "<b>Across the world women are more likely than men to value<br>"
+            "<b>Across the world women are more likely than men to value "
             "personality over looks</b><br>"
         ),
-        yanchor="top",
-        y=0.95,
-        x=0.03,
+        x=0, xref="paper", xanchor="left",
+        y=1, yref="paper", yanchor="bottom",
+        pad=dict(
+            b=115, l=-40,
+        )
     ),
     margin=dict(
         t=160,
