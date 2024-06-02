@@ -62,7 +62,7 @@ elif challenge == "wow18wk09":
     )
 elif challenge == "wow18wk10":
     st.markdown(
-        "[Challenge source](https://workout-wednesday.com/week-10/): Keep an Eye on Sales [The line end is not round]"
+        "[Challenge source](https://workout-wednesday.com/week-10/): Keep an Eye on Sales"
     )
 
 
