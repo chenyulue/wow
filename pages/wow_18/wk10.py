@@ -100,7 +100,7 @@ def get_figure():
             fig.add_trace(
                 go.Scatter(
                     name=segment,
-                    mode="lines",
+                    mode="lines+markers",
                     meta=[
                         data18w10_calculated.loc[(week, segment), "Sales"],
                         segment,
@@ -111,6 +111,10 @@ def get_figure():
                     line=dict(
                         color=cm[segment],
                         width=6,
+                    ),
+                    marker=dict(
+                        symbol="circle",
+                        size=6,
                     ),
                     showlegend=week == 1,
                     hovertemplate="Salse: %{meta[0]:$,.0f}<br>%{meta[1]}<br>Week %{meta[2]}<extra></extra>",
