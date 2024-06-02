@@ -117,6 +117,7 @@ def get_figure():
                         size=6,
                     ),
                     showlegend=week == 1,
+                    legendgroup=segment,
                     hovertemplate="Salse: %{meta[0]:$,.0f}<br>%{meta[1]}<br>Week %{meta[2]}<extra></extra>",
                 )
             )
