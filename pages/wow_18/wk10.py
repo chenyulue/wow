@@ -1,12 +1,7 @@
-import itertools
-from datetime import datetime, timedelta
+from datetime import datetime
 
 # Plotly
-import plotly.express as px
 import plotly.graph_objects as go
-
-# Altair
-import altair as alt
 
 # Data manipulation
 import pandas as pd
@@ -84,57 +79,110 @@ def transform_data():
     for i in data18w10_calculated.index.get_level_values(0).unique():
         calc_r(data18w10_calculated, i)
 
-    return data18w10_calculated.reset_index()
+    return data18w10_calculated
 
 
 @st.cache_data
 def get_figure():
     data18w10_calculated = transform_data()
-    width, height = 500, 550
-    title = alt.Title(
-        "KEEP AN EYE ON SALES",
-        subtitle="Weekly Sales by Segment for 2017",
-        fontSize=20,
-        color="black",
-        subtitleFontSize=16,
-        subtitleColor="#666666",
+    width, height = 600, 600
+    cm = dict(
+        zip(["Corporate", "Consumer", "Home Office"], ["#E84D5B", "#6FB899", "#26979F"])
+    )
+    BGCOLOR = "#EAE2CF"
+
+    fig = go.Figure()
+
+    for week in data18w10_calculated.index.get_level_values(0).unique():
+        for segment in ["Corporate", "Consumer", "Home Office"]:
+            r = np.array(data18w10_calculated.loc[(week, segment), ["r1", "r2"]])
+            angle = data18w10_calculated.loc[(week, segment), "angle"]
+            fig.add_trace(
+                go.Scatter(
+                    name=segment,
+                    mode="lines",
+                    meta=[
+                        data18w10_calculated.loc[(week, segment), "Sales"],
+                        segment,
+                        week,
+                    ],
+                    x=r * np.sin(angle),
+                    y=r * np.cos(angle),
+                    line=dict(
+                        color=cm[segment],
+                        width=6,
+                    ),
+                    showlegend=week == 1,
+                    hovertemplate="Salse: %{meta[0]:$,.0f}<br>%{meta[1]}<br>Week %{meta[2]}<extra></extra>",
+                )
+            )
+
+    fig.add_annotation(
+        text="#WOW 2018, Week 10",
+        x=0,
+        xref="paper",
+        xanchor="left",
+        y=0,
+        yref="paper",
+        yanchor="top",
+        showarrow=False,
+        yshift=-10,
+    )
+    fig.add_annotation(
+        text="By Chenyu Lue",
+        x=1,
+        xref="paper",
+        xanchor="right",
+        y=0,
+        yref="paper",
+        yanchor="top",
+        showarrow=False,
+        yshift=-10,
     )
 
-    base = alt.Chart(data18w10_calculated, title=title).transform_calculate(
-        x1="sin(datum.angle) * datum.r1",
-        x2="sin(datum.angle) * datum.r2",
-        y1="cos(datum.angle) * datum.r1",
-        y2="cos(datum.angle) * datum.r2",
-    )
-
-    chart = base.mark_rule(strokeWidth=6, strokeCap="round").encode(
-        x=alt.X("x1:Q").axis(None),
-        x2="x2:Q",
-        y=alt.Y("y1:Q").axis(None),
-        y2="y2:Q",
-        color=alt.Color("Segment:N")
-        .scale(
-            domain=["Corporate", "Consumer", "Home Office"],
-            range=["#E84D5B", "#6FB899", "#26979F"],
-        )
-        .sort(["Corporate", "Consumer", "Home Office"])
-        .legend(
-            title=None,
-            legendX=210,
-            legendY=220,
-            orient="none",
-            labelFontSize=13,
-            labelColor="black",
-            symbolStrokeWidth=6,
+    title = dict(
+        text=(
+            "<span style='font-weight: bold; font-size:24'>KEEP AN EYE ON SALES</span><br>"
+            "<span style='font-color:#666666'>Weekly Sales by Segment for 2017</span>"
         ),
-        tooltip=[
-            alt.Tooltip("Sales:Q", format="$,.0f"),
-            alt.Tooltip("Segment:N"),
-            alt.Tooltip("Week:O"),
-        ],
+        x=0.5,
+        xref="paper",
+        xanchor="center",
+        y=1,
+        yref="paper",
+        yanchor="bottom",
+        pad_b=30,
     )
 
-    return chart.properties(
+    fig.update_layout(
         width=width,
         height=height,
-    ).configure(background="#EAE2CF", view=alt.ViewConfig(strokeWidth=0))
+        plot_bgcolor=BGCOLOR,
+        paper_bgcolor=BGCOLOR,
+        title=title,
+        legend=dict(
+            x=0.5,
+            xref="paper",
+            xanchor="center",
+            y=0.5,
+            yref="paper",
+            yanchor="middle",
+            bgcolor="rgba(255,255,255,0)",
+        ),
+        xaxis=dict(
+            range=(-2.4, 2.4),
+            showgrid=False,
+            showticklabels=False,
+            ticks="",
+            zeroline=False,
+        ),
+        yaxis=dict(
+            range=(-2.4, 2.4),
+            showgrid=False,
+            showticklabels=False,
+            ticks="",
+            zeroline=False,
+        ),
+        margin=dict(t=50, l=50, r=50, b=50),
+    )
+    return fig

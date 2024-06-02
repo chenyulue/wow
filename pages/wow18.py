@@ -62,7 +62,7 @@ elif challenge == "wow18wk09":
     )
 elif challenge == "wow18wk10":
     st.markdown(
-        "[Challenge source](https://workout-wednesday.com/week-10/): Keep an Eye on Sales [by altair]"
+        "[Challenge source](https://workout-wednesday.com/week-10/): Keep an Eye on Sales [The line end is not round]"
     )
 
 
@@ -196,7 +196,7 @@ with plotly:
     elif challenge == "wow18wk10":
         from pages.wow_18 import wk10
         fig = wk10.get_figure()
-        st.altair_chart(fig, theme=None)
+        st.plotly_chart(fig, theme=None)
 
 with data:
     if challenge == "wow18wk01":
@@ -255,7 +255,7 @@ with data:
         st.dataframe(data.iloc[:, [0,1,2,3]], use_container_width=True)
     elif challenge == "wow18wk10":
         from pages.wow_18 import wk10
-        data = wk10.transform_data()
+        data = wk10.transform_data().reset_index()
         st.dataframe(data.iloc[:, [0, 1, 2]], use_container_width=True)
 
 with st.expander("See the complete plotting code"):
