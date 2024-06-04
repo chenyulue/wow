@@ -14,6 +14,7 @@ DATA_18W07 = DATA_18W02
 DATA_18W08 = DATA_DIR / "18W08_babynames1950+.csv"
 DATA_18W09 = DATA_DIR / "18W09_MLB_Ethnicity_1947-2016.csv"
 DATA_18W10 = DATA_18W02
+DATA_18W11 = DATA_18W02
 
 if __name__ == "__main__":
     print(DATA_18W01)
