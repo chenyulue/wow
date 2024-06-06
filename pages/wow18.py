@@ -14,7 +14,8 @@ options = {
     "wow18wk07": "Week 07: Min and Max Sales by Month",
     "wow18wk08": "Week 08: Is it a trending baby name?",
     "wow18wk09": "Week 09: Highlighting all points in the year",
-    "wow18wk10": "Week 10: Keep an Eye on Sales"
+    "wow18wk10": "Week 10: Keep an Eye on Sales",
+    "wow18wk11": "Week 11: Small Multiple Grids with Text",
 }
 
 challenge = st.selectbox(
@@ -63,6 +64,10 @@ elif challenge == "wow18wk09":
 elif challenge == "wow18wk10":
     st.markdown(
         "[Challenge source](https://workout-wednesday.com/week-10/): Keep an Eye on Sales"
+    )
+elif challenge == "wow18wk11":
+    st.markdown(
+        "[Challenge source](https://workout-wednesday.com/workout-wednesday-week-11/): Small Multiple Grids with Text"
     )
 
 
@@ -197,6 +202,10 @@ with plotly:
         from pages.wow_18 import wk10
         fig = wk10.get_figure()
         st.plotly_chart(fig, theme=None)
+    elif challenge == "wow18wk11":
+        from pages.wow_18 import wk11
+        fig = wk11.get_figure()
+        st.plotly_chart(fig, use_container_width=True)
 
 with data:
     if challenge == "wow18wk01":
@@ -257,6 +266,10 @@ with data:
         from pages.wow_18 import wk10
         data = wk10.transform_data().reset_index()
         st.dataframe(data.iloc[:, [0, 1, 2]], use_container_width=True)
+    elif challenge == "wow18wk11":
+        from pages.wow_18 import wk11
+        data = wk11.transform_data().reset_index()
+        st.dataframe(data, use_container_width=True)
 
 with st.expander("See the complete plotting code"):
     file = f"./pages/wow_18/{challenge[5:]}.py"  # type: ignore
