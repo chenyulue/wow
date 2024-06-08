@@ -16,6 +16,7 @@ options = {
     "wow18wk09": "Week 09: Highlighting all points in the year",
     "wow18wk10": "Week 10: Keep an Eye on Sales",
     "wow18wk11": "Week 11: Small Multiple Grids with Text",
+    "wow18wk12": "Week 12: Sub-Category Sales Change in the Last Two Periods"
 }
 
 challenge = st.selectbox(
@@ -68,6 +69,10 @@ elif challenge == "wow18wk10":
 elif challenge == "wow18wk11":
     st.markdown(
         "[Challenge source](https://workout-wednesday.com/workout-wednesday-week-11/): Small Multiple Grids with Text"
+    )
+elif challenge == "wow18wk12":
+    st.markdown(
+        "[Challenge source](https://workout-wednesday.com/week-11-sub-category-sales-change-in-the-last-two-periods/): Sub-Category Sales Change in the Last Two Periods"
     )
 
 
@@ -206,6 +211,24 @@ with plotly:
         from pages.wow_18 import wk11
         fig = wk11.get_figure()
         st.plotly_chart(fig, use_container_width=True)
+    elif challenge == "wow18wk12":
+        from pages.wow_18 import wk12
+        st.markdown("### Sub-Category Sales Change in the Last Two Periods")
+        data18w12 = wk12.load_data()
+        current_max_date = st.slider(
+            label="Set Max Order Date:",
+            min_value = data18w12["Order Date"].min(),
+            max_value = data18w12["Order Date"].max(),
+            value=datetime(2017, 3, 13),
+            key="current_max_date",
+        )
+        end, start = wk12.get_last_two_periods_format(current_max_date)
+        st.markdown(
+            f"Orders between <span style='color:#8DBFA8;font-weight:bold'>{start}</span> and <span style='color:#26897E;font-weight:bold'>{end}</span>",
+            unsafe_allow_html=True,
+        )
+        fig = wk12.get_figure(current_max_date)
+        st.plotly_chart(fig, use_container_width=True)
 
 with data:
     if challenge == "wow18wk01":
@@ -269,6 +292,10 @@ with data:
     elif challenge == "wow18wk11":
         from pages.wow_18 import wk11
         data = wk11.transform_data().reset_index()
+        st.dataframe(data, use_container_width=True)
+    elif challenge == "wow18wk12":
+        from pages.wow_18 import wk12
+        data = wk12.transform_data(st.session_state["current_max_date"]).reset_index()
         st.dataframe(data, use_container_width=True)
 
 with st.expander("See the complete plotting code"):

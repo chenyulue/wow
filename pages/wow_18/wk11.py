@@ -83,10 +83,12 @@ def get_figure():
                 **{
                     f"yaxis{i*3+j+1}": dict(
                         showticklabels=False,
+                        showgrid=False,
                     ),
                     f"xaxis{i*3+j+1}": dict(
                         showticklabels=False,
                         autorange="reversed",
+                        showgrid=False,
                     ),
                 }
             )
