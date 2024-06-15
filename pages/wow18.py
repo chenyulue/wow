@@ -16,7 +16,8 @@ options = {
     "wow18wk09": "Week 09: Highlighting all points in the year",
     "wow18wk10": "Week 10: Keep an Eye on Sales",
     "wow18wk11": "Week 11: Small Multiple Grids with Text",
-    "wow18wk12": "Week 12: Sub-Category Sales Change in the Last Two Periods"
+    "wow18wk12": "Week 12: Sub-Category Sales Change in the Last Two Periods",
+    "wow18wk13": "Week 13: Color and Ordering",
 }
 
 challenge = st.selectbox(
@@ -74,6 +75,10 @@ elif challenge == "wow18wk12":
     st.markdown(
         "[Challenge source](https://workout-wednesday.com/week-11-sub-category-sales-change-in-the-last-two-periods/): Sub-Category Sales Change in the Last Two Periods"
     )
+elif challenge == "wow18wk13":
+    st.markdown("""[Challenge source](https://workout-wednesday.com/week-13/): Color and Ordering
+
+Note: The function of Table in plotly is limited. I cannot found any way to merge the column header in level 1.""")
 
 
 plotly, data = st.tabs(["Chart", "Data"])
@@ -201,24 +206,28 @@ with plotly:
         st.plotly_chart(fig, use_container_width=True)
     elif challenge == "wow18wk09":
         from pages.wow_18 import wk09
+
         fig = wk09.get_figure()
         st.plotly_chart(fig, use_container_width=True)
     elif challenge == "wow18wk10":
         from pages.wow_18 import wk10
+
         fig = wk10.get_figure()
         st.plotly_chart(fig, theme=None)
     elif challenge == "wow18wk11":
         from pages.wow_18 import wk11
+
         fig = wk11.get_figure()
         st.plotly_chart(fig, use_container_width=True)
     elif challenge == "wow18wk12":
         from pages.wow_18 import wk12
+
         st.markdown("### Sub-Category Sales Change in the Last Two Periods")
         data18w12 = wk12.load_data()
         current_max_date = st.slider(
             label="Set Max Order Date:",
-            min_value = data18w12["Order Date"].min(),
-            max_value = data18w12["Order Date"].max(),
+            min_value=data18w12["Order Date"].min(),
+            max_value=data18w12["Order Date"].max(),
             value=datetime(2017, 3, 13),
             key="current_max_date",
         )
@@ -229,6 +238,24 @@ with plotly:
         )
         fig = wk12.get_figure(current_max_date)
         st.plotly_chart(fig, use_container_width=True)
+    elif challenge == "wow18wk13":
+        from pages.wow_18 import wk13
+
+        col1, col2 = st.columns([1, 1])
+        year = col1.selectbox(
+            label="Year:",
+            options=[2014, 2015, 2016, 2017],
+            key="year",
+        )
+        measure = col2.selectbox(
+            label="Measure:",
+            options=["Sales", "% of Total", "% Diff"],
+            key="measure",
+        )
+        fig = wk13.get_figure(year, measure)
+        st.plotly_chart(
+            fig,
+        )
 
 with data:
     if challenge == "wow18wk01":
@@ -283,19 +310,30 @@ with data:
         st.dataframe(data, use_container_width=True)
     elif challenge == "wow18wk09":
         from pages.wow_18 import wk09
+
         data = wk09.load_data()
-        st.dataframe(data.iloc[:, [0,1,2,3]], use_container_width=True)
+        st.dataframe(data.iloc[:, [0, 1, 2, 3]], use_container_width=True)
     elif challenge == "wow18wk10":
         from pages.wow_18 import wk10
+
         data = wk10.transform_data().reset_index()
         st.dataframe(data.iloc[:, [0, 1, 2]], use_container_width=True)
     elif challenge == "wow18wk11":
         from pages.wow_18 import wk11
+
         data = wk11.transform_data().reset_index()
         st.dataframe(data, use_container_width=True)
     elif challenge == "wow18wk12":
         from pages.wow_18 import wk12
+
         data = wk12.transform_data(st.session_state["current_max_date"]).reset_index()
+        st.dataframe(data, use_container_width=True)
+    elif challenge == "wow18wk13":
+        from pages.wow_18 import wk13
+
+        data = wk13.transform_data(
+            st.session_state["year"], st.session_state["measure"]
+        ).reset_index()
         st.dataframe(data, use_container_width=True)
 
 with st.expander("See the complete plotting code"):
