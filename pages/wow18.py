@@ -18,6 +18,7 @@ options = {
     "wow18wk11": "Week 11: Small Multiple Grids with Text",
     "wow18wk12": "Week 12: Sub-Category Sales Change in the Last Two Periods",
     "wow18wk13": "Week 13: Color and Ordering",
+    "wow18wk14": "Week 14: Frequency Matrix",
 }
 
 challenge = st.selectbox(
@@ -79,6 +80,10 @@ elif challenge == "wow18wk13":
     st.markdown("""[Challenge source](https://workout-wednesday.com/week-13/): Color and Ordering
 
 Note: The function of Table in plotly is limited. I cannot found any way to merge the column header in level 1.""")
+elif challenge == "wow18wk14":
+    st.markdown(
+        "[Challenge source](https://workout-wednesday.com/week-14/): Frequency Matrix"
+    )
 
 
 plotly, data = st.tabs(["Chart", "Data"])
@@ -254,8 +259,12 @@ with plotly:
         )
         fig = wk13.get_figure(year, measure)
         st.plotly_chart(
-            fig,
+            fig, use_container_width=True,
         )
+    elif challenge == "wow18wk14":
+        from pages.wow_18 import wk14
+        fig = wk14.get_figure()
+        st.plotly_chart(fig, use_container_width=True, theme=None)
 
 with data:
     if challenge == "wow18wk01":
@@ -334,6 +343,10 @@ with data:
         data = wk13.transform_data(
             st.session_state["year"], st.session_state["measure"]
         ).reset_index()
+        st.dataframe(data, use_container_width=True)
+    elif challenge == "wow18wk14":
+        from pages.wow_18 import wk14
+        data = wk14.calculate_data()
         st.dataframe(data, use_container_width=True)
 
 with st.expander("See the complete plotting code"):
