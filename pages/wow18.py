@@ -19,6 +19,7 @@ options = {
     "wow18wk12": "Week 12: Sub-Category Sales Change in the Last Two Periods",
     "wow18wk13": "Week 13: Color and Ordering",
     "wow18wk14": "Week 14: Frequency Matrix",
+    "wow18wk15": "Week 15: Total Products by Sub-Category OR Top 5 Sub-Categories by Total Product",
 }
 
 challenge = st.selectbox(
@@ -83,6 +84,10 @@ Note: The function of Table in plotly is limited. I cannot found any way to merg
 elif challenge == "wow18wk14":
     st.markdown(
         "[Challenge source](https://workout-wednesday.com/week-14/): Frequency Matrix"
+    )
+elif challenge == "wow18wk15":
+    st.markdown(
+        "[Challenge source](https://workout-wednesday.com/week-15/): Total Products by Sub-Category OR Top 5 Sub-Categories by Total Product"
     )
 
 
@@ -265,6 +270,15 @@ with plotly:
         from pages.wow_18 import wk14
         fig = wk14.get_figure()
         st.plotly_chart(fig, use_container_width=True, theme=None)
+    elif challenge == "wow18wk15":
+        from pages.wow_18 import wk15
+        fig_intermediate = wk15.get_intermediate_figure()
+        fig_jedi = wk15.get_jedi_figure()
+        st.markdown("##### Intermediate figure:")
+        st.plotly_chart(fig_intermediate, theme=None)
+        st.divider()
+        st.markdown("##### Jedi figure:")
+        st.plotly_chart(fig_jedi, theme=None)
 
 with data:
     if challenge == "wow18wk01":
@@ -347,6 +361,10 @@ with data:
     elif challenge == "wow18wk14":
         from pages.wow_18 import wk14
         data = wk14.calculate_data()
+        st.dataframe(data, use_container_width=True)
+    elif challenge == "wow18wk15":
+        from pages.wow_18 import wk15
+        data = wk15.transform_data()
         st.dataframe(data, use_container_width=True)
 
 with st.expander("See the complete plotting code"):
