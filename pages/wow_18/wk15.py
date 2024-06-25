@@ -74,6 +74,7 @@ def get_intermediate_figure():
             hovertemplate="<b>%{customdata[0]}</b><br>%{customdata[1]:$,.2f}<extra></extra>",
             hoverlabel=dict(
                 bgcolor="white",
+                align="left",
             )
         ), row=1, col=5-i)
 
@@ -190,6 +191,7 @@ def get_jedi_figure():
             hovertemplate="<b>%{customdata[0]}</b><br>Introduced on %{customdata[1]|%Y/%m/%d}<extra></extra>",
             hoverlabel=dict(
                 bgcolor="white",
+                align="left",
             )
         ), row=row, col=col)
 
