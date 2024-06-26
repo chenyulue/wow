@@ -20,6 +20,7 @@ options = {
     "wow18wk13": "Week 13: Color and Ordering",
     "wow18wk14": "Week 14: Frequency Matrix",
     "wow18wk15": "Week 15: Total Products by Sub-Category OR Top 5 Sub-Categories by Total Product",
+    "wow18wk16": "Week 16: Sales for the last N vs. same time previous year",
 }
 
 challenge = st.selectbox(
@@ -88,6 +89,10 @@ elif challenge == "wow18wk14":
 elif challenge == "wow18wk15":
     st.markdown(
         "[Challenge source](https://workout-wednesday.com/week-15/): Total Products by Sub-Category OR Top 5 Sub-Categories by Total Product"
+    )
+elif challenge == "wow18wk16":
+    st.markdown(
+        "[Challenge source](https://workout-wednesday.com/week-16/): Sales for the last N vs. same time previous year"
     )
 
 
@@ -279,6 +284,32 @@ with plotly:
         st.divider()
         st.markdown("##### Jedi figure:")
         st.plotly_chart(fig_jedi, theme=None)
+    elif challenge == "wow18wk16":
+        from pages.wow_18 import wk16
+        st.markdown("#### Sales For the Last Full 1 Week vs. Same Time Previous Year")
+        col1, col2, col3 = st.columns([1,1,1])
+        end_date = col1.slider(
+            label="Select End Date:",
+            min_value=datetime(2017,1,1),
+            max_value=datetime(2017,12,30),
+            value=datetime(2017, 6, 28),
+            key="end_date",
+        )
+        period_type = col2.selectbox(
+            label="Select Period Type:",
+            options=["Day", "Week", "Month"],
+            index=2,
+            key="period_type",
+        )
+        period_numbers = col3.slider(
+            label="Select Number of Periods:",
+            min_value=1,
+            max_value=12,
+            value=6,
+            key="period_numbers"
+        )
+        fig = wk16.get_figure(end_date, period_type, period_numbers)
+        st.plotly_chart(fig, use_container_width=True)
 
 with data:
     if challenge == "wow18wk01":
@@ -365,6 +396,14 @@ with data:
     elif challenge == "wow18wk15":
         from pages.wow_18 import wk15
         data = wk15.transform_data()
+        st.dataframe(data, use_container_width=True)
+    elif challenge == "wow18wk16":
+        from pages.wow_18 import wk16
+        data = wk16.transform_data(
+            st.session_state["end_date"],
+            st.session_state["period_type"],
+            st.session_state["period_numbers"]
+        )
         st.dataframe(data, use_container_width=True)
 
 with st.expander("See the complete plotting code"):
