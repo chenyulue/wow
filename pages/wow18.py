@@ -286,7 +286,16 @@ with plotly:
         st.plotly_chart(fig_jedi, theme=None)
     elif challenge == "wow18wk16":
         from pages.wow_18 import wk16
-        st.markdown("#### Sales For the Last Full 1 Week vs. Same Time Previous Year")
+        st.markdown("#### Sales For the Last Full "
+                    f"{st.session_state['period_numbers']} {st.session_state['period_type']}{'s' if st.session_state['period_numbers']>1 else ''} "
+                    "vs. Same Time Previous Year")
+        start, end = wk16.get_period(
+            st.session_state["end_date"],
+            st.session_state["period_type"],
+            st.session_state["period_numbers"]
+        )
+        left, center, right = st.columns([1,3,1])
+        center.markdown(f"Sales for: {start.strftime('%B %d, %Y')} - {end.strftime('%B %d, %Y')}")
         col1, col2, col3 = st.columns([1,1,1])
         end_date = col1.slider(
             label="Select End Date:",
