@@ -286,6 +286,13 @@ with plotly:
         st.plotly_chart(fig_jedi, theme=None)
     elif challenge == "wow18wk16":
         from pages.wow_18 import wk16
+        if "end_date" not in st.session_state:
+            st.session_state["end_date"] = datetime(2017, 6, 28)
+        if "period_type" not in st.session_state:
+            st.session_state["period_type"] = "Month"
+        if "period_numbers" not in st.session_state:
+            st.session_state["period_numbers"] = 6
+            
         st.markdown("#### Sales For the Last Full "
                     f"{st.session_state['period_numbers']} {st.session_state['period_type']}{'s' if st.session_state['period_numbers']>1 else ''} "
                     "vs. Same Time Previous Year")
@@ -301,20 +308,17 @@ with plotly:
             label="Select End Date:",
             min_value=datetime(2017,1,1),
             max_value=datetime(2017,12,30),
-            value=datetime(2017, 6, 28),
             key="end_date",
         )
         period_type = col2.selectbox(
             label="Select Period Type:",
             options=["Day", "Week", "Month"],
-            index=2,
             key="period_type",
         )
         period_numbers = col3.slider(
             label="Select Number of Periods:",
             min_value=1,
             max_value=12,
-            value=6,
             key="period_numbers"
         )
         fig = wk16.get_figure(end_date, period_type, period_numbers)
