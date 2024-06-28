@@ -21,6 +21,7 @@ options = {
     "wow18wk14": "Week 14: Frequency Matrix",
     "wow18wk15": "Week 15: Total Products by Sub-Category OR Top 5 Sub-Categories by Total Product",
     "wow18wk16": "Week 16: Sales for the last N vs. same time previous year",
+    "wow18wk17": "Week 17: Step, Jump, or Linear?",
 }
 
 challenge = st.selectbox(
@@ -93,6 +94,10 @@ elif challenge == "wow18wk15":
 elif challenge == "wow18wk16":
     st.markdown(
         "[Challenge source](https://workout-wednesday.com/week-16/): Sales for the last N vs. same time previous year"
+    )
+elif challenge == "wow18wk17":
+    st.markdown(
+        "[Challenge source](https://workout-wednesday.com/week-17-step-jump-or-linear/): Step, Jump, or Linear?"
     )
 
 
@@ -323,6 +328,16 @@ with plotly:
         )
         fig = wk16.get_figure(end_date, period_type, period_numbers)
         st.plotly_chart(fig, use_container_width=True)
+    elif challenge == "wow18wk17":
+        from pages.wow_18 import wk17
+        col3, col1, col2 = st.columns([1, 2, 1])
+        col1.markdown("### STEP, JUMP, OR LINEAR?")
+        chart_type = col2.selectbox(
+            label="Chart Type:",
+            options=["Step", "Jump", "Linear"],
+        )
+        fig = wk17.get_figure(chart_type)
+        st.plotly_chart(fig, use_container_width=True, theme=None)
 
 with data:
     if challenge == "wow18wk01":
@@ -417,6 +432,10 @@ with data:
             st.session_state["period_type"],
             st.session_state["period_numbers"]
         )
+        st.dataframe(data, use_container_width=True)
+    elif challenge == "wow18wk17":
+        from pages.wow_18 import wk17
+        data = wk17.transform_data()
         st.dataframe(data, use_container_width=True)
 
 with st.expander("See the complete plotting code"):
