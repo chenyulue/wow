@@ -22,6 +22,7 @@ options = {
     "wow18wk15": "Week 15: Total Products by Sub-Category OR Top 5 Sub-Categories by Total Product",
     "wow18wk16": "Week 16: Sales for the last N vs. same time previous year",
     "wow18wk17": "Week 17: Step, Jump, or Linear?",
+    "wow18wk18": "Week 18: Customer Retention By Cohort and Quarter",
 }
 
 challenge = st.selectbox(
@@ -98,6 +99,10 @@ elif challenge == "wow18wk16":
 elif challenge == "wow18wk17":
     st.markdown(
         "[Challenge source](https://workout-wednesday.com/week-17-step-jump-or-linear/): Step, Jump, or Linear?"
+    )
+elif challenge == "wow18wk18":
+    st.markdown(
+        "[Challenge source](https://workout-wednesday.com/week-18/): Customer Retention By Cohort and Quarter"
     )
 
 
@@ -338,6 +343,14 @@ with plotly:
         )
         fig = wk17.get_figure(chart_type)
         st.plotly_chart(fig, use_container_width=True, theme=None)
+    elif challenge == "wow18wk18":
+        from pages.wow_18 import wk18
+        st.markdown("##### Intermediate figure:")
+        fig = wk18.get_intermediate_figure()
+        st.plotly_chart(fig, use_container_container=True)
+        st.markdown("##### Jedi figure:")
+        fig = wk18.get_jedi_figure()
+        st.plotly_chart(fig, use_container_width=True)
 
 with data:
     if challenge == "wow18wk01":
@@ -436,6 +449,10 @@ with data:
     elif challenge == "wow18wk17":
         from pages.wow_18 import wk17
         data = wk17.transform_data()
+        st.dataframe(data, use_container_width=True)
+    elif challenge == "wow18wk18":
+        from pages.wow_18 import wk18
+        data = wk18.transform_data()
         st.dataframe(data, use_container_width=True)
 
 with st.expander("See the complete plotting code"):
