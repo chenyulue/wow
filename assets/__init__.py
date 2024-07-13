@@ -22,6 +22,8 @@ DATA_18W15 = DATA_18W02
 DATA_18W16 = DATA_18W02
 DATA_18W17 = DATA_18W02
 DATA_18W18 = DATA_18W02
+DATA_18W19 = DATA_18W02
+DATA_MAP = DATA_DIR / "us_state_code.csv"
 
 if __name__ == "__main__":
     print(DATA_18W01)

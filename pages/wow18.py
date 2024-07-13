@@ -23,6 +23,7 @@ options = {
     "wow18wk16": "Week 16: Sales for the last N vs. same time previous year",
     "wow18wk17": "Week 17: Step, Jump, or Linear?",
     "wow18wk18": "Week 18: Customer Retention By Cohort and Quarter",
+    "wow18wk19": "Week 19: Dashboard Presentation",
 }
 
 challenge = st.selectbox(
@@ -103,6 +104,10 @@ elif challenge == "wow18wk17":
 elif challenge == "wow18wk18":
     st.markdown(
         "[Challenge source](https://workout-wednesday.com/week-18/): Customer Retention By Cohort and Quarter"
+    )
+elif challenge == "wow18wk19":
+    st.markdown(
+        "[Challenge source](https://workout-wednesday.com/week-19-dashboard-presentation/): Dashboard Presentation"
     )
 
 
@@ -351,6 +356,30 @@ with plotly:
         st.markdown("##### Jedi figure:")
         fig = wk18.get_jedi_figure()
         st.plotly_chart(fig, use_container_width=True)
+    elif challenge == "wow18wk19":
+        from pages.wow_18 import wk19
+        _, m1, _ = st.columns([1,2,1])
+        with m1:
+            st.markdown("##### BORING SALES DASHBOARD")
+        container_height = 400
+        fig_customer = wk19.get_customer_sales_figure()
+        fig_subcategory = wk19.get_subcategory_sales_figure()
+        fig_state = wk19.get_state_sales_figure()
+        col1, col2 = st.columns([1,1])
+        with col1:
+            st.markdown("Customer Sales")
+            with st.container(height=container_height):
+                st.plotly_chart(fig_customer, use_container_width=True)
+        with col2:
+            st.markdown("Sub-Category Sales")
+            with st.container(height=container_height):
+                st.plotly_chart(fig_subcategory, use_container_width=True)
+
+        _, m2, _ =st.columns([2,2,1])
+        with m2:
+            st.markdown("Sales by State")
+        with st.container():
+            st.plotly_chart(fig_state, use_container_width=True)
 
 with data:
     if challenge == "wow18wk01":
@@ -453,6 +482,10 @@ with data:
     elif challenge == "wow18wk18":
         from pages.wow_18 import wk18
         data = wk18.transform_data()
+        st.dataframe(data, use_container_width=True)
+    elif challenge == "wow18wk19":
+        from pages.wow_18 import wk19
+        data = wk19.load_data()
         st.dataframe(data, use_container_width=True)
 
 with st.expander("See the complete plotting code"):
