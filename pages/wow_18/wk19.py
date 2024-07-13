@@ -30,10 +30,9 @@ def get_customer_sales_figure():
     )
     fig.update_traces(
         marker_color="#349A52",
-        hovertemplate="Customer Name: <b>%{y}</b><br>        Sales: <b>%{x:$,.0f}</b>",
+        hovertemplate="Customer Name: <b>%{y}</b><br>Sales: <b>%{x:$,.0f}</b>",
         hoverlabel=dict(
             bgcolor="white",
-            align="left",
         ),
     )
 
@@ -61,10 +60,9 @@ def get_subcategory_sales_figure():
     )
     fig.update_traces(
         marker_color="#349A52",
-        hovertemplate="Sub-Category: <b>%{y}</b><br>       Sales: <b>%{x:$,.0f}</b>",
+        hovertemplate="Sub-Category: <b>%{y}</b><br>Sales: <b>%{x:$,.0f}</b>",
         hoverlabel=dict(
             bgcolor="white",
-            align="left",
         )
     )
 
@@ -95,10 +93,9 @@ def get_state_sales_figure():
         locationmode="USA-states",
         colorscale="YlGn",
         customdata=state_sales[["State"]],
-        hovertemplate="Country: <b>United States</b><br>State: <b>%{customdata[0]}</b><br>  Sales: <b>%{z:$,.0f}</b>",
+        hovertemplate="Country: <b>United States</b><br>State: <b>%{customdata[0]}</b><br>Sales: <b>%{z:$,.0f}</b>",
         hoverlabel=dict(
             bgcolor="white",
-            align="left",
         )
     ))
     fig.update_traces(
